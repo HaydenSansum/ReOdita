@@ -5,7 +5,7 @@
 void ofApp::setup(){
     
     // Parameters
-    rand_chance = 0.5; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
+    rand_chance = 1.0; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
     
     // Initialize sizes
     block_width = ofGetWidth() / draw_binary_ncols;
@@ -80,23 +80,39 @@ void ofApp::shuffle_draw_matrix(){
             int i = i_order[i_select];
             int j = j_order[j_select];
             
-            // Only perform operations if the current cell is 100
-            if (draw_binary_matrix[i][j] == 100) {
+            // Only perform operations if the current cell is 100 or 98 - untouched or available for top
+            if (draw_binary_matrix[i][j] == 100 or draw_binary_matrix[i][j] == 98) {
                 
                 // Random probability of 1 else nothing
                 float rand_float = ofRandom(1.0);
-                if (rand_float < rand_chance) {
+                if (rand_float <= rand_chance) {
                     
-                    draw_binary_matrix[i][j] = 1;
-                    // If the column is an even number - highlight bottom left as 1, if odd highlight bottom right as 1
+                    // If the column is an odd number - highlight bottom left as 2, if even highlight bottom right as 2
                     if (j % 2 != 0) {
-                        draw_binary_matrix[i][j-1] = 0;
-                        draw_binary_matrix[i+1][j-1] = 2; // Set to 2 to represent the bottom
-                        draw_binary_matrix[i+1][j] = 0;
+                        // Check the areas diagonally down and opposite to see if open
+                        if (draw_binary_matrix[i+1][j-1] == 100 or draw_binary_matrix[i+1][j-1] == 99) {
+                            draw_binary_matrix[i][j] = 1;
+                            draw_binary_matrix[i+1][j-1] = 2; // Set to 2 to represent the bottom
+                            if (draw_binary_matrix[i][j-1] == 100) {
+                                draw_binary_matrix[i][j-1] = 99; // Set to 99 to represent available only for bottom (Only update is currently blank)
+                            }
+                            if (draw_binary_matrix[i+1][j] == 100) {
+                                draw_binary_matrix[i+1][j] = 98; // Set to 98 to represent available only for top (Only update is currently blank)
+                            }
+                        }
                     } else {
-                        draw_binary_matrix[i][j+1] = 0;
-                        draw_binary_matrix[i+1][j+1] = 2; // Set to 2 to represent the bottom
-                        draw_binary_matrix[i+1][j] = 0;
+                        // Check the areas diagonally down and opposite to see if open
+                        if (draw_binary_matrix[i+1][j+1] == 100 or draw_binary_matrix[i+1][j+1] == 99) {
+                            draw_binary_matrix[i][j] = 1;
+                            draw_binary_matrix[i+1][j+1] = 2; // Set to 2 to represent the bottom
+                            if (draw_binary_matrix[i][j+1] == 100) {
+                                draw_binary_matrix[i][j+1] = 99; // Set to 99 to represent available only for bottom (Only update is currently blank)
+                            }
+                            if (draw_binary_matrix[i+1][j] == 100) {
+                                draw_binary_matrix[i+1][j] = 98; // Set to 98 to represent available only for top (Only update is currently blank)
+                            }
+                            
+                        }
                     }
                     
                 }
