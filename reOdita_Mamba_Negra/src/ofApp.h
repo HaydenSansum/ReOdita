@@ -11,7 +11,8 @@ class ofApp : public ofBaseApp{
     
         void shuffle_draw_matrix();
         void reset_draw_matrix();
-        void draw_triangle(int i, int j);
+        void draw_triangle_top(int i, int j, ofColor color_left, ofColor color_right);
+        void draw_triangle_bottom(int i, int j, ofColor color_left, ofColor color_right);
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -30,9 +31,16 @@ class ofApp : public ofBaseApp{
     int draw_binary_nrows = 10;
     int draw_binary_ncols = 24;
     
+    // Vectors to shuffle for index ordering
+    vector <int> i_order;
+    vector <int> j_order;
+    
     // Triangle sizes
     float block_width;
     float block_height;
+    
+    // Parameters
+    float rand_chance;
 	
     // Screenshots
     ofImage img;
