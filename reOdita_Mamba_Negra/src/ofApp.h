@@ -12,6 +12,7 @@ class ofApp : public ofBaseApp{
         void shuffle_draw_matrix();
         void shuffle_color_matrix();
         void reset_draw_matrix();
+        void reset_color_matrix();
         void draw_triangle_top(int i, int j, ofColor color_left, ofColor color_right);
         void draw_triangle_bottom(int i, int j, ofColor color_left, ofColor color_right);
         void build_sample_colors();

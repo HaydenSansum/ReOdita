@@ -5,7 +5,7 @@
 void ofApp::setup(){
     
     // Parameters
-    rand_chance = 0.4; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
+    rand_chance = 0.5; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
     num_colors = 18; // Must match color list in function build sample colors
     
     // Initialize sizes
@@ -171,6 +171,15 @@ void ofApp::reset_draw_matrix(){
 }
 
 //--------------------------------------------------------------
+void ofApp::reset_color_matrix(){
+    for (int i = 0; i < (draw_binary_nrows); i++) {
+        for (int j = 0; j < draw_binary_ncols; j++) {
+            draw_color_matrix[i][j] = ofVec2f(100,100);
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void ofApp::draw_triangle_top(int i, int j, ofColor color_left, ofColor color_right){
    
     // 4 possible cases depending on which corner of the grid
@@ -260,6 +269,7 @@ void ofApp::keyPressed(int key){
     
     if (key == 's') {
         reset_draw_matrix();
+        reset_color_matrix();
         shuffle_draw_matrix();
         shuffle_color_matrix();
     }
