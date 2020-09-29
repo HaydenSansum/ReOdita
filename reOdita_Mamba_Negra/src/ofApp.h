@@ -38,6 +38,7 @@ class ofApp : public ofBaseApp{
     ofVec2f draw_color_matrix[10][24];
     vector <ofColor> sample_colors;
     int num_colors;
+    float brightness_scaler;
     
     // Vectors to shuffle for index ordering
     vector <int> i_order;

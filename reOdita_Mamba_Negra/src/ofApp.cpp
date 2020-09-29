@@ -7,6 +7,7 @@ void ofApp::setup(){
     // Parameters
     rand_chance = 0.5; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
     num_colors = 18; // Must match color list in function build sample colors
+    brightness_scaler = 60;
     
     // Initialize sizes
     block_width = ofGetWidth() / draw_binary_ncols;
@@ -254,7 +255,13 @@ void ofApp::build_sample_colors(){
  
     // Build colors
     for (int i = 0; i < 18; i++) {
-        sample_colors.push_back(ofColor(reds[i], greens[i], blues[i]));
+        ofColor cur_color = ofColor(reds[i], greens[i], blues[i]);
+        float h;
+        float s;
+        float b;
+        cur_color.getHsb(h, s, b);
+        cur_color.setHsb(h, s, fmin(b + brightness_scaler, 255.0));
+        sample_colors.push_back(cur_color);
     }
         
 }
