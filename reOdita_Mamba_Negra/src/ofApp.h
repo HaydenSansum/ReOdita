@@ -10,9 +10,11 @@ class ofApp : public ofBaseApp{
 		void draw();
     
         void shuffle_draw_matrix();
+        void shuffle_color_matrix();
         void reset_draw_matrix();
         void draw_triangle_top(int i, int j, ofColor color_left, ofColor color_right);
         void draw_triangle_bottom(int i, int j, ofColor color_left, ofColor color_right);
+        void build_sample_colors();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -30,6 +32,11 @@ class ofApp : public ofBaseApp{
     int draw_binary_matrix[10][24];
     int draw_binary_nrows = 10;
     int draw_binary_ncols = 24;
+    
+    // Matrix to track colors
+    ofVec2f draw_color_matrix[10][24];
+    vector <ofColor> sample_colors;
+    int num_colors;
     
     // Vectors to shuffle for index ordering
     vector <int> i_order;

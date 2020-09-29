@@ -5,7 +5,8 @@
 void ofApp::setup(){
     
     // Parameters
-    rand_chance = 1.0; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
+    rand_chance = 0.4; // Float representing P(draw) (0.5 = 50%, 0.9 = 90%)
+    num_colors = 18; // Must match color list in function build sample colors
     
     // Initialize sizes
     block_width = ofGetWidth() / draw_binary_ncols;
@@ -15,11 +16,18 @@ void ofApp::setup(){
     for (int i = 0; i < draw_binary_nrows; i++) {
         for (int j = 0; j < draw_binary_ncols; j++) {
             draw_binary_matrix[i][j] = 100;
+            draw_color_matrix[i][j] = ofVec2f(100,100);
         }
     }
     
+    // Build colors
+    build_sample_colors();
+    
     // Generate an initial draw matrix
     shuffle_draw_matrix();
+    
+    // From that matrix assign colors randomly
+    shuffle_color_matrix();
     
 }
 
@@ -34,16 +42,17 @@ void ofApp::draw(){
     
     ofBackground(255);
     ofSetColor(0);
+    ofSeedRandom(10);
     
     for (int j = 0; j < draw_binary_ncols; j++) {
         for (int i = 0; i < draw_binary_nrows; i++) {
     
             if (draw_binary_matrix[i][j] == 1) {
                 // Draw the top of the triangle
-                draw_triangle_top(i, j, ofColor(0), ofColor(50));
+                draw_triangle_top(i, j, sample_colors[draw_color_matrix[i][j][0]], sample_colors[draw_color_matrix[i][j][1]]);
             } else if (draw_binary_matrix[i][j] == 2) {
                 // Draw the bottom of the triangle
-                draw_triangle_bottom(i, j, ofColor(0), ofColor(50));
+                draw_triangle_bottom(i, j, sample_colors[draw_color_matrix[i][j][0]], sample_colors[draw_color_matrix[i][j][1]]);
             }
                 
        }
@@ -124,6 +133,35 @@ void ofApp::shuffle_draw_matrix(){
 }
 
 //--------------------------------------------------------------
+void ofApp::shuffle_color_matrix(){
+    
+    for (int i = 0; i < draw_binary_nrows; i++) {
+        for (int j = 0; j < draw_binary_ncols; j++) {
+            
+            // Check whether the underlying point in the draw matrix is a 1 or a 2
+            if(draw_binary_matrix[i][j] == 1 or draw_binary_matrix[i][j] == 2) {
+                
+                // Check whether a color has been assigned already (first index is fine) - if so then ignore
+                if(draw_color_matrix[i][j][0] == 100) {
+                
+                    ofVec2f selected_colors = ofVec2f((int)ofRandom(num_colors - 1), (int)ofRandom(num_colors - 1));
+                    draw_color_matrix[i][j] = selected_colors;
+                    if (j % 2 != 0) {
+                        draw_color_matrix[i+1][j-1] = selected_colors;
+                    } else {
+                        draw_color_matrix[i+1][j+1] = selected_colors;
+                    }
+                }
+                
+            }
+            
+        }
+    }
+
+}
+
+
+//--------------------------------------------------------------
 void ofApp::reset_draw_matrix(){
     for (int i = 0; i < (draw_binary_nrows); i++) {
         for (int j = 0; j < draw_binary_ncols; j++) {
@@ -197,6 +235,20 @@ void ofApp::draw_triangle_bottom(int i, int j, ofColor color_left, ofColor color
     
 }
 
+//--------------------------------------------------------------
+void ofApp::build_sample_colors(){
+ 
+    // List of available colors
+    int reds[18] = {203, 217, 115, 218, 228, 135, 217, 231, 116, 156, 88, 1, 82, 150, 187, 28, 196, 220};
+    int greens[18] = {58, 118, 167, 150, 194, 35, 150, 215, 29, 45, 170, 13, 147, 179, 189, 76, 116, 153};
+    int blues[18] = {43, 89, 202, 120, 76, 46, 127, 157, 48, 91, 161, 58, 49, 65, 70, 146, 165, 63};
+ 
+    // Build colors
+    for (int i = 0; i < 18; i++) {
+        sample_colors.push_back(ofColor(reds[i], greens[i], blues[i]));
+    }
+        
+}
 
 // OF HELPER FUNCTIONS
 //--------------------------------------------------------------
@@ -209,6 +261,7 @@ void ofApp::keyPressed(int key){
     if (key == 's') {
         reset_draw_matrix();
         shuffle_draw_matrix();
+        shuffle_color_matrix();
     }
 }
 
