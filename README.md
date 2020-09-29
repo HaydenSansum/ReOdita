@@ -16,7 +16,7 @@ The organization and patterning in the paintings are of my own design. I continu
 
 ## Mamba Negra
 
-Mamba Negra was a temporary Mural exhibit at the ICA in Miama.
+Mamba Negra was a temporary Mural exhibit at the ICA in Miama, it consists of an interwoven set of trapezoids, each with a split color down the diagonal. The pattern appears random at first but it is in fact strongly regimented in a grid system.
 
 Putting the original side by side with my recreation: 
 
@@ -26,9 +26,20 @@ Original            |  Recreation
 
 #### Process
 
+The way I approached this piece was to turn the canvas into a grid - 10 horizontal rows and 24 vertical lines. The original may appear at first to be 10 by 12 but its important to note that each diamond shape can be either diagonal to the left or to the right and hence splitting the 12 vertical columns into 24 allows for the specification of the diagonal direction.
+
+The first rectangular representation below was to get a feel for this "grid" and whether it seems to reproduce the space of the original. Each of the grid cells has a probability of being blank or drawn as a rectangle.
+
+This quickly led me to realize that within this grid there were a number of sub rules. For example if a "top" triangle is drawn in an even numbered cell, the "bottom" triangle will be diagonally below on the right. If it is drawn in an odd numbered cell then the opposite will be true. The second gif below represents what happends when drawing these triangles incorrectly - they do not align into the proper diamond shapes.
+
+A number of extra rules later (such as specifying that certain matrix cells are available only for a top or a bottom triangle) which aided the tessalation I managed to build a consistent and randomly generated grid of trapezoids which reproduced the shape of the original piece.
 
 <img src="reOdita_Mamba_Negra/bin/data/v1_gif.gif" width=250 height=400> <img src="reOdita_Mamba_Negra/bin/data/v2_gif.gif" width=250 height=400> <img src="reOdita_Mamba_Negra/bin/data/v3_gif.gif" width=250 height=400> 
 
+Once I had the shape my focus moved onto reproducing the color in a way which was faithful to the original (as color is a very important theme in Odili's work). I quickly found that the matrix grid based approach I had implemented for drawing the trapezoids as two triangles also meant that I would need an equivalent grid/matrix approach for the colors. Without this there is no consistency between the randomly selected color for the top and bottom triangle (as can be seen from the middle gif below).
 
+Implementing this matrix however solved this issue and enabled me to randomly sample colors in a consistent way between the shapes and finish the recreation (bottom right). I did however wish to expand on my exploration of the colors - at the moment the palette is hard coded from Odili's original but this didn't feel very satisfying know how much thought must have gone into the process of generating and selecting the colors.
+
+I attempted to implement a color generation methodology using an inverse Kumaraswamy distribution (similar to a Beta distribution) so colors can be naturally sampled from a probabilistic distribution rather than being deterministic. I unfortunately didn't get time to finish this project however but hopefully it will be reappearing as a future work.
 
 <img src="reOdita_Mamba_Negra/bin/data/v4_gif.gif" width=250 height=400> <img src="reOdita_Mamba_Negra/bin/data/v5_gif.gif" width=250 height=400><img src="reOdita_Mamba_Negra/bin/data/v7_gif.gif" width=250 height=400> 
